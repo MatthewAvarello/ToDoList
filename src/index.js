@@ -1,6 +1,6 @@
 import "./style.css";
 console.log("Webpack template!");
-
+// CONTINUE WRITING WHEN YOU HAVE ENERGY. I AM CURRENTLY MAKING HORRENDOUS DESIGN CHOICES
 class Project {
     constructor(name){
         this.name = name
@@ -30,18 +30,37 @@ class ToDo{
 }
 
 const DOMController = (function(){
-
+    let projectContainer = document.querySelector("#project-list-container")
+    let newprojectbtn = document.querySelector("#NewProject")
+    newprojectbtn.addEventListener("click",NewProjectDom)
+    function NewProjectDom(){
+        MainApp
+    }
     function DisplayProjects(){
         let projectArrayCopy = MainApp.projectArrayCopy()
+        for(let project of projectArrayCopy){
+            let container = document.createElement("div")
+            let header = document.createElement("h3")
+            header.textContent = project.name
+            let todoscont = document.createElement("div")
+            for (let todo of project.todos){
+                console.log(todo)
+                let tododom = todo.title
+                todoscont.append(tododom)
+            }
+            console.log(project)
+            container.append(header,todoscont)
+            projectContainer.append(container)
+        }
     }
+    return{DisplayProjects}
 })();
 
 const MainApp = (function(){
     let projectarray = []
-    function NewProject(name){
+    function newProject(name){
         let newproject = new Project(name)
         projectarray.push(newproject)
-        console.log(projectarray)
     } 
     function NewToDo(title,duedate,description,priority,projectparent){
         projectparent.addtodo(title,duedate,description,priority,projectparent)
@@ -52,10 +71,18 @@ const MainApp = (function(){
     function logprojectarray(){
         console.log(projectarray)
     }
-    return{NewProject,projectArrayCopy,logprojectarray}
+    return{newProject,projectArrayCopy,logprojectarray}
 })();
 
-MainApp.NewProject("CleanHouse")
-MainApp.projectarray[0].addtodo("Clean Closet","2025-06-21","Sort out clothes that no longer fit",2)
-console.log(MainApp.projectArrayCopy())
-//let testToDO = new ToDo("Clean Closet","2025-06-21","Sort out clothes that no longer fit",2)
+MainApp.newProject("CleanHouse")
+MainApp.newProject("Dollar")
+MainApp.newProject("Wassup")
+DOMController.DisplayProjects()
+let cleanHouseProject = MainApp.projectArrayCopy().find(p => p.name === "CleanHouse");
+console.log(cleanHouseProject)
+cleanHouseProject.addtodo("Clean bed","tommorow","BLA BLA",1)
+MainApp.newProject("E")
+DOMController.DisplayProjects()
+
+
+ 
